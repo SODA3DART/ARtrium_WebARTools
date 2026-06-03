@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARtrium WebAR Editor — 飛び出す AR を作る</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <header>
+    <h1>ARtrium WebAR Editor</h1>
+    <p>
+      3Dモデル（GLB）と MindAR データをアップロードするだけで、
+      「飛び出す AR」の Web ページ一式が ZIP でダウンロードできます。
+      Three.js プレビューでレイアウト調整も可能。プログラミング不要です。
+    </p>
+  </header>
+
+  <main class="layout">
+    <!-- Step 1: Marker -->
+    <section class="card">
+      <h2><span class="step-num">1</span> マーカー画像をアップロード</h2>
+      <p class="hint">
+        カメラで認識させる画像です。ポスター・イラスト・ロゴなど、
+        はっきりした模様がある画像を使ってください。
+      </p>
+      <div class="dropzone" id="drop-marker">
+        <input type="file" id="file-marker" accept=".png,.jpg,.jpeg,.webp,image/*">
+        <div class="icon">🖼️</div>
+        <div class="label">クリックまたはドラッグ＆ドロップ</div>
+        <div class="sub">PNG / JPG / WebP</div>
+      </div>
+      <img id="preview-marker" class="preview-img" alt="マーカープレビュー">
+    </section>
+
+    <!-- Step 2: Mind AR -->
+    <section class="card">
+      <h2><span class="step-num">2</span> MindAR ターゲット（.mind）をアップロード</h2>
+      <p class="hint">
+        上のマーカー画像から生成した <code>.mind</code> ファイルです。
+        まだお持ちでない場合は、下の手順で無料で作れます。
+      </p>
+      <div class="mindar-box">
+        <strong>MindAR ターゲットの作り方（約1分）</strong>
+        <ol>
+          <li>下のボタンから MindAR Compiler を開く</li>
+          <li>Step 1 で用意した<strong>同じ画像</strong>をアップロード</li>
+          <li>「Compile」をクリックして <code>.mind</code> をダウンロード</li>
+          <li>ダウンロードしたファイルをここにアップロード</li>
+        </ol>
+        <a class="btn-link" href="https://hiukim.github.io/mind-ar-js-doc/tools/compile" target="_blank" rel="noopener">
+          MindAR Compiler を開く →
+        </a>
+      </div>
+      <div class="dropzone" id="drop-mind" style="margin-top:16px">
+        <input type="file" id="file-mind" accept=".mind">
+        <div class="icon">🎯</div>
+        <div class="label">.mind ファイルをアップロード</div>
+        <div class="sub">MindAR Compiler で生成したファイル</div>
+      </div>
+    </section>
+
+    <!-- Step 3: GLB -->
+    <section class="card">
+      <h2><span class="step-num">3</span> 3D モデル（GLB）をアップロード</h2>
+      <p class="hint">
+        マーカーの上に表示される 3D キャラクターやオブジェクトです。
+        Blender などから GLB 形式で書き出したファイルを使います。
+      </p>
+      <div class="dropzone" id="drop-glb">
+        <input type="file" id="file-glb" accept=".glb,model/gltf-binary">
+        <div class="icon">🧊</div>
+        <div class="label">GLB ファイルをアップロード</div>
+        <div class="sub">メインの 3D モデル（必須）</div>
+      </div>
+
+      <p class="hint" style="margin-top:20px">
+        <span class="optional-tag">任意</span>
+        ステージ（背景）モデルや BGM も追加できます
+      </p>
+      <div class="form-grid two">
+        <div class="dropzone" id="drop-stage">
+          <input type="file" id="file-stage" accept=".glb,model/gltf-binary">
+          <div class="icon">🏟️</div>
+          <div class="label">ステージ GLB（任意）</div>
+          <div class="sub">キャラの下に敷くモデル</div>
+        </div>
+        <div class="dropzone" id="drop-audio">
+          <input type="file" id="file-audio" accept=".mp3,.wav,.ogg,audio/*">
+          <div class="icon">🎵</div>
+          <div class="label">BGM（任意）</div>
+          <div class="sub">マーカー認識時に再生</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4: 3D Layout -->
+    <section class="card scene-editor-card" id="section-scene">
+      <h2><span class="step-num">4</span> 3D レイアウトを調整</h2>
+      <p class="hint">
+        Three.js プレビュー上でモデルの位置・回転・大きさを調整できます。
+        マーカー（白い板）から飛び出すように見えるよう配置してください。
+      </p>
+      <div class="scene-viewport-wrap">
+        <div id="scene-viewport" class="scene-viewport"></div>
+        <div id="scene-empty-msg" class="scene-empty-msg">
+          Step 3 で GLB モデルをアップロードすると<br>ここに 3D プレビューが表示されます
+        </div>
+      </div>
+      <div class="scene-toolbar">
+        <div class="scene-toolbar-group" role="group" aria-label="編集対象">
+          <button type="button" class="scene-btn active" id="btn-select-character" disabled>キャラクター</button>
+          <button type="button" class="scene-btn" id="btn-select-stage" disabled>ステージ</button>
+        </div>
+        <div class="scene-toolbar-group" role="group" aria-label="操作モード">
+          <button type="button" class="scene-btn active" id="btn-mode-translate">移動</button>
+          <button type="button" class="scene-btn" id="btn-mode-rotate">回転</button>
+          <button type="button" class="scene-btn" id="btn-mode-scale">拡大</button>
+        </div>
+        <div class="scene-toolbar-group" role="group" aria-label="プレビュー">
+          <button type="button" class="scene-btn active" id="btn-preview-stand">立体プレビュー</button>
+          <button type="button" class="scene-btn" id="btn-preview-poster">ポスタープレビュー</button>
+        </div>
+        <button type="button" class="scene-btn" id="btn-reset-transform">リセット</button>
+      </div>
+      <div class="scene-transform-panel disabled" id="transform-panel">
+        <h3 id="transform-panel-title">キャラクター — トランスフォーム</h3>
+        <div class="transform-rows">
+          <div class="transform-row">
+            <span class="transform-row-label">位置</span>
+            <div class="axis-inputs">
+              <label class="axis-field"><span>X</span><input type="number" id="t-pos-x" step="0.01" value="0"></label>
+              <label class="axis-field"><span>Y</span><input type="number" id="t-pos-y" step="0.01" value="0"></label>
+              <label class="axis-field"><span>Z</span><input type="number" id="t-pos-z" step="0.01" value="0"></label>
+            </div>
+          </div>
+          <div class="transform-row">
+            <span class="transform-row-label">回転°</span>
+            <div class="axis-inputs">
+              <label class="axis-field"><span>X</span><input type="number" id="t-rot-x" step="1" value="90"></label>
+              <label class="axis-field"><span>Y</span><input type="number" id="t-rot-y" step="1" value="0"></label>
+              <label class="axis-field"><span>Z</span><input type="number" id="t-rot-z" step="1" value="0"></label>
+            </div>
+          </div>
+          <div class="transform-row">
+            <span class="transform-row-label">拡大</span>
+            <div class="axis-inputs">
+              <label class="axis-field"><span>X</span><input type="number" id="t-scale-x" step="0.01" min="0.001" value="0.3"></label>
+              <label class="axis-field"><span>Y</span><input type="number" id="t-scale-y" step="0.01" min="0.001" value="0.3"></label>
+              <label class="axis-field"><span>Z</span><input type="number" id="t-scale-z" step="0.01" min="0.001" value="0.3"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="scene-hint-bar">
+        💡 ギズモをドラッグするか、下の X / Y / Z の数値を変更して調整できます（入力するとすぐ 3D に反映されます）。
+      </p>
+    </section>
+
+    <!-- Step 5: Settings -->
+    <section class="card">
+      <h2><span class="step-num">5</span> 表示設定</h2>
+      <p class="hint">わからない場合はそのままで OK です。あとから ZIP 内の設定ファイルで変更もできます。</p>
+      <div class="form-grid two">
+        <label class="field">
+          <span>AR のタイトル</span>
+          <input type="text" id="input-title" placeholder="例：飛び出す！キャラクター AR" value="飛び出す AR">
+        </label>
+        <label class="field">
+          <span>ZIP ファイル名</span>
+          <input type="text" id="input-project-name" placeholder="例：my-character-ar" value="my-ar">
+        </label>
+        <label class="field">
+          <span>マーカーダイアログのタイトル</span>
+          <input type="text" id="input-marker-title" placeholder="空欄なら AR タイトルを使用">
+        </label>
+      </div>
+      <label class="field" style="margin-top:12px">
+        <span>マーカー説明文</span>
+        <textarea id="input-marker-desc" placeholder="下の画像と同じものをカメラで映すと、3Dモデルが表示されます。"></textarea>
+      </label>
+      <div class="check-row" style="margin-top:16px">
+        <label><input type="checkbox" id="chk-animation" checked> アニメーションを再生（GLB にアニメがある場合）</label>
+        <label><input type="checkbox" id="chk-poster" checked> ポスターモード切替ボタンを表示</label>
+        <label><input type="checkbox" id="chk-double-sided" checked> 両面表示（輪郭線付きモデル向け）</label>
+        <label><input type="checkbox" id="chk-wireframe"> ソリッド WF 切替ボタンを表示</label>
+      </div>
+    </section>
+
+    <!-- Download -->
+    <section class="card download-section">
+      <div id="checklist" class="required-list"></div>
+      <p>
+        ZIP には <code>index.html</code>・設定ファイル・3D モデル・マーカーがすべて含まれます。<br>
+        解凍後、Web サーバーに置けばすぐ AR 体験として公開できます。
+      </p>
+      <button type="button" class="btn-download" id="btn-download" disabled>
+        📦 飛び出す AR プロジェクトを ZIP ダウンロード
+      </button>
+      <div id="status-msg" class="status-msg"></div>
+    </section>
+  </main>
+
+  <footer>
+    ARtrium WebAR Tools — MIT License<br>
+    PC: <strong>エディタを起動.bat</strong> ／ スマホで試す: <strong>スマホで試す（ngrok）.bat</strong>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="scene-editor.js"></script>
+  <script src="packager.js"></script>
+  <script src="app.js" defer></script>
+</body>
+</html>

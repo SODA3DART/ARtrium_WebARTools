@@ -1,0 +1,19 @@
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Dependencies
+node_modules/
+
+# Large binary assets (ユーザーが各自追加)
+*.glb
+*.gltf
+*.mind
+*.mp3
+*.wav
+
+# Keep directory structure
+!**/.gitkeep

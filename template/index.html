@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARtrium WebAR</title>
+
+  <!-- A-Frame + MindAR + アニメーション -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+
+  <!-- ARtrium 共通ライブラリ（パスはプロジェクト構成に合わせて調整） -->
+  <link rel="stylesheet" href="../lib/artrium-ar-ui.css">
+  <script src="../lib/artrium-ar-components.js"></script>
+  <script src="ar-config.js"></script>
+  <script src="../lib/artrium-ar-runtime.js"></script>
+</head>
+<body>
+  <!-- ランタイムが a-scene をここに生成 -->
+  <div id="artrium-scene-root"></div>
+</body>
+</html>

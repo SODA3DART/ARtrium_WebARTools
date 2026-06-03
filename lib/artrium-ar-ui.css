@@ -1,0 +1,126 @@
+/* ARtrium WebAR Tools — 共通 UI */
+
+.artrium-back-link {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10000;
+  padding: 8px 20px;
+  background: rgba(20, 20, 30, 0.75);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  text-decoration: none;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  backdrop-filter: blur(10px);
+}
+
+.artrium-back-link:hover {
+  background: rgba(40, 40, 55, 0.9);
+}
+
+.artrium-ui-btn {
+  position: fixed;
+  z-index: 10000;
+  padding: 8px 18px;
+  background: rgba(20, 20, 30, 0.75);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.artrium-ui-btn:hover {
+  background: rgba(40, 40, 55, 0.9);
+}
+
+#artrium-marker-btn {
+  top: 20px;
+  right: 20px;
+}
+
+#artrium-view-btn {
+  bottom: 68px;
+  right: 20px;
+}
+
+#artrium-mode-btn {
+  bottom: 20px;
+  right: 20px;
+}
+
+.artrium-marker-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+}
+
+.artrium-marker-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.artrium-marker-panel {
+  max-width: min(92vw, 440px);
+  background: #1a1a24;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: sans-serif;
+  color: #eee;
+}
+
+.artrium-marker-panel h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.artrium-marker-panel p {
+  margin: 0 0 12px 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #bbb;
+}
+
+.artrium-marker-panel img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  background: #fff;
+}
+
+.artrium-marker-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+  gap: 10px;
+}
+
+.artrium-marker-close {
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.artrium-marker-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
