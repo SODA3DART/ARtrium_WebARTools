@@ -1,48 +1,37 @@
 @echo off
-chcp 65001 >nul 2>&1
 cd /d "%~dp0"
+title ARtrium
 
-title ARtrium — ZIP からスマホで AR を見る
-
-echo.
-echo  ========================================================
-echo    ZIP からスマホで AR を見る
-echo  ========================================================
-echo.
-echo   【使い方】
-echo   1. Editor でダウンロードした .zip を
-echo      このフォルダの「projects」に入れる
-echo      または、この bat に ZIP をドラッグ＆ドロップ
-echo   2. 自動で解凍 → URL 発行 → QR コード表示
-echo   3. スマホで QR を読み取って AR 体験
-echo.
-echo   ※ 初回は Node.js と ngrok のセットアップが必要です
-echo.
+if not exist "projects" mkdir "projects"
 
 where node >nul 2>&1
-if errorlevel 1 (
-    echo  [エラー] Node.js がありません。
-    echo  「初回セットアップ（Node.js）.bat」を実行してください。
-    pause
-    exit /b 1
-)
+if errorlevel 1 goto NO_NODE
 
 where ngrok >nul 2>&1
-if errorlevel 1 (
-    echo  [エラー] ngrok がありません。
-    echo  「初回セットアップ（ngrok）.bat」を実行してください。
-    pause
-    exit /b 1
-)
-
-if not exist "%~dp0projects" mkdir "%~dp0projects"
+if errorlevel 1 goto NO_NGROK
 
 if "%~1"=="" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\zip-to-smartphone.ps1"
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\zip-to-smartphone.ps1"
 ) else (
-    echo   ZIP: %~1
-    echo.
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\zip-to-smartphone.ps1" -ZipPath "%~1"
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\zip-to-smartphone.ps1" -ZipPath "%~1"
 )
+goto END
 
+:NO_NODE
+echo.
+echo  Node.js が必要です。
+echo  「初回セットアップ（Node.js）.bat」を先に実行してください。
+echo.
+pause
+exit /b 1
+
+:NO_NGROK
+echo.
+echo  ngrok が必要です。
+echo  「初回セットアップ（ngrok）.bat」を先に実行してください。
+echo.
+pause
+exit /b 1
+
+:END
 if errorlevel 1 pause

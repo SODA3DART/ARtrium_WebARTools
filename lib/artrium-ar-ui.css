@@ -1,5 +1,119 @@
 /* ARtrium WebAR Tools — 共通 UI */
 
+/* スマホ: カメラ画面を全画面に（白い余白・上半分だけ映る問題の対策） */
+html.artrium-ar-page,
+html.artrium-ar-page body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #000 !important;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+#artrium-scene-root {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
+  z-index: 1;
+  background: #000;
+}
+
+#artrium-scene-root a-scene {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  min-height: -webkit-fill-available !important;
+}
+
+#artrium-scene-root canvas.a-canvas,
+#artrium-scene-root .a-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#artrium-scene-root video {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* MindAR のスキャン用 UI（白い枠など）を非表示 */
+.mindar-ui-overlay,
+.mindar-ui-loading,
+.mindar-ui-scanning {
+  display: none !important;
+}
+
+/* スマホ向けヒント */
+#artrium-mobile-hint {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 72px;
+  z-index: 10002;
+  padding: 14px 16px;
+  background: rgba(20, 30, 50, 0.92);
+  border: 1px solid rgba(0, 198, 255, 0.4);
+  border-radius: 14px;
+  color: #eef0f6;
+  font-family: sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+}
+
+#artrium-mobile-hint strong {
+  color: #00c6ff;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+#artrium-mobile-hint .tap-close {
+  display: block;
+  margin-top: 10px;
+  color: #9aa3b8;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #artrium-marker-btn {
+    top: max(12px, env(safe-area-inset-top));
+    right: 12px;
+    font-size: 0.82rem;
+    padding: 8px 14px;
+  }
+
+  #artrium-mode-btn {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    right: 12px;
+  }
+
+  #artrium-view-btn {
+    bottom: max(64px, calc(16px + env(safe-area-inset-bottom)));
+    right: 12px;
+  }
+
+  .artrium-marker-overlay {
+    padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  }
+}
+
 .artrium-back-link {
   position: fixed;
   top: 20px;
