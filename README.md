@@ -129,7 +129,8 @@ ARtrium_WebARTools/
 
 ## 著作権表示
 
-**崇城大学芸術学部美術学科 3Dアートコース © Soda3DART 2026**
+**崇城大学芸術学部美術学科 3Dアートコース © Soda3DART 2026**  
+技術開発 @HoloMoto
 
 ## 今後の予定
 
