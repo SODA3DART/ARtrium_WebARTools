@@ -112,7 +112,9 @@ ARtrium_WebARTools/
 
 ## 元プロジェクト
 
-専門学校 Soda3DART 3年生の WebAR 展示「**飛び出す!ARキャラクター**」の技術を OSS 化したものです。
+崇城大学芸術学部 3Dアートコース 3年生の WebAR 展示「**[飛び出す!ARキャラクター](https://3d.art.sojo-u.ac.jp/spatial/ar_character_hub.html)**」の技術を OSS 化したものです。
+
+展示ページ: https://3d.art.sojo-u.ac.jp/spatial/ar_character_hub.html
 
 ## オープンソース・免責事項
 
